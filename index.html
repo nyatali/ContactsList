@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hello World!</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.0/react.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.0/react-dom.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.6.15/browser.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.3.1/dist/semantic.min.css">
+   
+</head>
+<body>
+    <div id='content'></div>
+    <div id='app'></div>
+    
+    <script type="text/babel">
+    //Data of our phonebook
+        var Data =[
+            { 
+            id: 1,
+            phone: 380965432508,
+            name: "Аркадий",
+            company: "Netflix",
+            email: "arkadii1999@gmail.com",
+            img: "https://cdn0.iconfinder.com/data/icons/kameleon-free-pack-rounded/110/Man-1-128.png"
+            },
+            {
+            id: 2,
+            phone:  380975642190,
+            name: "Ольга Иванова",
+            company: "Nestle",
+            email: "olllgaivan@gmail.com",
+            img: "https://cdn0.iconfinder.com/data/icons/kameleon-free-pack-rounded/110/Woman-15-128.png"
+            },
+            {
+            id: 3,
+            phone: 380734413367,
+            name: "Борис Петрович",
+            company: "NovaPosta",
+            email: "boris@gmail.com",
+            img: "https://cdn0.iconfinder.com/data/icons/kameleon-free-pack-rounded/110/Man-14-128.png"
+            }
+        ];
+        //This class returns the particular list item with all the properties displayed and formatted image 
+        var Contact = React.createClass({
+            render: function() {
+                return <li className="contact"> 
+                <img className="contact-image" src={this.props.img} width="50px" height="50px"/>
+                <div className="contact-info">
+                    <div className="contact-name">{this.props.name}</div>
+                    <div className="contact-number">{this.props.phone}</div> 
+                    <div className="contact-company">{this.props.company}</div> 
+                    <div className="contact-email">{this.props.email}</div> 
+                    </div>
+                    <br/>
+                    </li>;
+            }
+        });
+      //returns object with state of our component(Data)
+      var ContactsList = React.createClass({
+          getInitialState: function(){
+              return {
+                  displayedContacts: Data
+              };
+          }, 
+        //function to check whether inputed chars correspond el.name() 
+        inputSearch: function(event){
+          var searchContent = event.target.value.toLowerCase();
+          var displayedContacts = Data.filter(function(el){
+              var searchChars = el.name.toLowerCase();
+                return searchChars.indexOf(searchContent) !== -1;
+          });
+          this.setState({
+              displayedContacts: displayedContacts
+          });
+        },
+           // returns <Contact> with properties set to equal from Data variable. This part used semantic-ui(button)
+            render: function () {
+                return (
+                    <div className="contacts">                 
+                    <input type="text" class="ui input" placeholder="Найти..." onChange={this.inputSearch} /> 
+                            <ul className="contacts-list">
+                            {
+                                this.state.displayedContacts.map(function(el){
+                                    return <Contact 
+                                        key={el.id} 
+                                        phone={el.phone}
+                                        name={el.name}
+                                        company={el.company}
+                                        email={el.email}
+                                        img={el.img}
+                                        />;
+                                })      
+
+                            }
+                        </ul>
+                    </div>
+                 );
+            }
+        });
+        // Rendering ContactList in html componet with ID "content" 
+        ReactDOM.render(
+            <ContactsList />,
+            document.getElementById('content')
+        );
+   </script>
+</body>
+</html>
+
+
